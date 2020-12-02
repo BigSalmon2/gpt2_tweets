@@ -102,12 +102,9 @@ def run_model(prompt, num, length, model_name):
         return 500
 
 # routing
-@app.route("/tweets/<model_name>", methods=['POST'])
+@app.route("/gpt2-tweets", methods=['POST'])
 def generation(model_name):
     try:
-        if model_name not in model_names:
-            return jsonify({'message' : 'Error! There is no model'}), 400
-
         # only get one request at a time
         if requests_queue.qsize() > BATCH_SIZE:
             return jsonify({'message' : 'TooManyReqeusts'}), 429
@@ -115,6 +112,9 @@ def generation(model_name):
         try:
             args = []
 
+            model_name = str(request.form['model'])
+            if model_name not in model_names:
+                return jsonify({'message' : 'Error! There is no model'}), 400
             prompt = str(request.form['text'])
             num = int(str(request.form['num_samples']))
             length = int(str(request.form['length']))

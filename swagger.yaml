@@ -1,64 +1,37 @@
 openapi: 3.0.1
 
 info:
-  title: ainize-gpt2-story
+  title: ainize-gpt2-tweets
   description: |
-      generate story via story based fine-tuned gpt2 model
+      generate celeb's tweet via tweets data based fine-tuned gpt2 model
   contact:
     name: Ainizer - gyumin Lee
-  version: "2.0"
+  version: "1.0"
   license:
     name: Apache License 2.0
     url: https://github.com/huggingface/transformers/blob/master/LICENSE
 
 servers:
-  - url: https://main-gpt2-trump-gmlee329.endpoint.ainize.ai
+  - url: https://main-gpt2-tweets-gmlee329.endpoint.ainize.ai
 
 paths:
-  /gpt2-trump/short:
+  /gpt2-tweets:
     post:
       requestBody:
         required: true
-        description: | 
+        description: |
+          Select model you want to generate tweet.
           Specify a length of the text and set the start prompt for the text to be generated.
-          The length must can be parse to integer
+          Specify a num_samples that is the number of proposals.
+          The length and num_sampls must can be parse to integer
         content:
           multipart/form-data:
             schema:
               type: object
               properties:
-                text:
+                model:
                   type: string
-                num_samples:
-                  type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-        '400':
-          description: Bad Request
-        
-        '429':
-          description: Busy to server, please retry again.
-
-        '500':
-          description: Server side error
-  
-  /gpt2-trump/long:
-    post:
-      requestBody:
-        required: true
-        description: | 
-          Specify a length of the text and set the start prompt for the text to be generated.
-          The length must can be parse to integer
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
+                  enum: ['barackobama', 'billgates', 'dualipa', 'elonmusk', 'iamcardib', 'joebiden', 'ladygaga', 'stephenking', 'tim_cook']
                 text:
                   type: string
                 num_samples:
