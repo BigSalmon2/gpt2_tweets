@@ -14,4 +14,4 @@ RUN pip install flask && pip install waitress
 WORKDIR /gpt2_tweet/
 EXPOSE 80
 COPY . .
-#ENTRYPOINT ["python", "server.py"]
+ENTRYPOINT ["python", "server.py"]
