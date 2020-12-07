@@ -10,7 +10,7 @@ For use This API, you need to check 4 parameters.
 **# POST parameter**
 
 ***/gpt2-tweets***  
-model : Choose the tweet model of the celebrity you want to generate.
+model : Choose the tweet model of the celebrity you want to generate.  
 text : Begining of the text you want to generate  
 number_samples : The number of sentence that will be generated  
 length : The length of each sentence  
