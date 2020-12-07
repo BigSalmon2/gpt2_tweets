@@ -34,6 +34,7 @@ for model_name in model_names:
     tokenizers[model_name] = AutoTokenizer.from_pretrained(huggingtweets + model_name)
     models[model_name] = AutoModelWithLMHead.from_pretrained(huggingtweets + model_name, return_dict=True)
     models[model_name].to(device)
+    print(f'{model_name} model loadeding complete..')
 
 # request queue setting
 requests_queue = Queue()
@@ -103,7 +104,7 @@ def run_model(prompt, num, length, model_name):
 
 # routing
 @app.route("/gpt2-tweets", methods=['POST'])
-def generation(model_name):
+def generation():
     try:
         # only get one request at a time
         if requests_queue.qsize() > BATCH_SIZE:
