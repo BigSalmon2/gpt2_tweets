@@ -27,7 +27,7 @@ tokenizers = dict()
 models = dict()
 
 # change cpu to gpu so that model can use gpu (because default type is cpu)
-device = torch.device('cpu')
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # model loading
 for model_name in model_names:
