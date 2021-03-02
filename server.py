@@ -76,7 +76,7 @@ threading.Thread(target=handle_requests_by_batch).start()
 # run model
 
 
-def run_model(prompt, num, length, model_name):
+def run_model(prompt, model_name):
     try:
       sentence = prompt.strip()
       model = models[model_name]
