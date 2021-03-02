@@ -18,11 +18,8 @@ import time
 app = Flask(__name__)
 
 # static variables
-huggingtweets = "huggingtweets/"
-model_names = ['barackobama', 'billgates', 'dualipa',
-               'elonmusk', 'iamcardib', 'joebiden',
-               'ladygaga', 'stephenking', 'tim_cook',
-               ]
+huggingtweets = "saibo/"
+model_names = ['legal-roberta-base']
 tokenizers = dict()
 models = dict()
 
@@ -81,31 +78,23 @@ threading.Thread(target=handle_requests_by_batch).start()
 
 def run_model(prompt, num, length, model_name):
     try:
-        prompt = prompt.strip()
-        tokenizer = tokenizers[model_name]
-        input_ids = tokenizer.encode(prompt, return_tensors='pt')
-
-        # input_ids also need to apply gpu device!
-        input_ids = input_ids.to(device)
-
-        min_length = len(input_ids.tolist()[0])
-        length += min_length
-
-        model = models[model_name]
-        sample_outputs = model.generate(input_ids, pad_token_id=50256,
-                                        do_sample=True,
-                                        max_length=length,
-                                        min_length=length,
-                                        top_k=40,
-                                        num_return_sequences=num)
-
-        generated_texts = {}
-        for i, sample_output in enumerate(sample_outputs):
-            output = tokenizer.decode(sample_output.tolist()[
-                                      min_length:], skip_special_tokens=True)
-            generated_texts[i] = output
-
-        return generated_texts
+      sentence = prompt.strip()
+      model = models[model_name]
+      tokenizer = tokenizers[model_name]
+      token_ids = tokenizer.encode(sentence, return_tensors='pt')
+      token_ids_tk = tokenizer.tokenize(sentence, return_tensors='pt')
+      masked_position = (token_ids.squeeze() == tokenizer.mask_token_id).nonzero()
+      masked_pos = [mask.item() for mask in masked_position ]
+      with torch.no_grad():
+        output = model(token_ids)
+        last_hidden_state = output[0].squeeze()
+        list_of_list =[]
+      for mask_index in masked_pos:
+        mask_hidden_state = last_hidden_state[mask_index]
+        idx = torch.topk(mask_hidden_state, k=30, dim=0)[1]
+        words = [tokenizer.decode(i.item()).strip() for i in idx]
+        list_of_list.append(words)
+      return list_of_list
 
     except Exception as e:
         print(e)
