@@ -9,7 +9,7 @@ import threading
 import time
 
 # import for model
-from transformers import AutoTokenizer, AutoModelWithLMHead, top_k_top_p_filtering
+from transformers import AutoTokenizer, AutoModelWithLMHead, top_k_top_p_filtering, AutoModelForMaskedLM
 from torch.nn import functional as F
 import torch
 import time
@@ -30,7 +30,7 @@ device = torch.device('cpu')
 for model_name in model_names:
     tokenizers[model_name] = AutoTokenizer.from_pretrained(
         huggingtweets + model_name)
-    models[model_name] = AutoModelWithLMHead.from_pretrained(
+    models[model_name] = AutoModelForMaskedLM.from_pretrained(
         huggingtweets + model_name, return_dict=True)
     models[model_name].to(device)
     print(f'{model_name} model loadeding complete..')
