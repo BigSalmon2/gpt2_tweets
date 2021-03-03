@@ -18,8 +18,7 @@ import time
 app = Flask(__name__)
 
 # static variables
-huggingtweets = "saibo/"
-model_names = ['legal-roberta-base']
+model_names = ['saibo/legal-roberta-base', 'roberta-base', 'vinai/bertweet-covid19-base-cased', 'bert-large-cased-whole-word-masking']
 tokenizers = dict()
 models = dict()
 
@@ -28,10 +27,8 @@ device = torch.device('cpu')
 
 # model loading
 for model_name in model_names:
-    tokenizers[model_name] = AutoTokenizer.from_pretrained(
-        huggingtweets + model_name)
-    models[model_name] = AutoModelForMaskedLM.from_pretrained(
-        huggingtweets + model_name, return_dict=True)
+    tokenizers[model_name] = AutoTokenizer.from_pretrained(model_name)
+    models[model_name] = AutoModelForMaskedLM.from_pretrained(model_name, return_dict=True)
     models[model_name].to(device)
     print(f'{model_name} model loadeding complete..')
 
